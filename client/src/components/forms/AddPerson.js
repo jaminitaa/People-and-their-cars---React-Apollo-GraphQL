@@ -27,6 +27,7 @@ const AddPerson = () => {
         },
         update: (cache, { data: { addPerson } }) => {
           const data = cache.readQuery({ query: GET_PEOPLE_WITH_CARS })
+          console.log(data)
           cache.writeQuery({
             query: GET_PEOPLE_WITH_CARS,
             data: {

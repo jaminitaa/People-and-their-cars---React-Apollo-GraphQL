@@ -113,7 +113,7 @@ type Person {
 type Query {
   person(id: String!): People
   people:[People]
-  car: [Cars]
+  allcar: [Cars]
   cars(personId: String!):[Cars]
   personWithCars: [PersonWithCars]
 }
@@ -122,7 +122,7 @@ type Mutation {
   addPerson(id:String!, firstName:String!, lastName:String!): People
   updatePerson(id: String!, firstName: String, lastName: String): People
   removePerson(id: String!): People
-  addCar(personId: String!, year: String!, make: String!, model: String!, price: Float!, id: String): Cars
+  addCar(id: String!, year: String!, make: String!, model: String!, price: Float!, personId: String!): Cars
   updateCar(id: String!, personId: String!, year: String!, make: String!, model: String!, price: Float!): Cars
   removeCar(id: String!): Cars
 }
@@ -153,7 +153,7 @@ const resolvers = {
     cars: (parent, args, context, info) => {
       return filter(carsArray, { personId: args.personId})
     },
-    car: () => carsArray,
+    allcar: () => carsArray,
     personWithCars: () => {
       let personCarsArray = [];
       peopleArray.forEach(element => {
@@ -210,7 +210,7 @@ const resolvers = {
         personId: args.personId
       };
 
-      cars.push(newCar);
+      carsArray.push(newCar);
 
       return newCar;
     },
@@ -225,6 +225,18 @@ const resolvers = {
       })
 
       return removedCar
+    },
+
+    updateCar: (root, args) => {
+      const car = find(cars, { id: args.id });
+      if (!car) throw new Error(`Couldn't find a car with ID ${args.id}`);
+        car.year = args.year;
+        car.make = args.make;
+        car.model = args.model;
+        car.price = args.price;
+        car.personId = args.personId;
+
+      return car;
     },
   }
 }

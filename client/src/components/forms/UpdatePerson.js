@@ -82,7 +82,7 @@ const UpdatePerson = props => {
               form.getFieldsError().filter(({ errors }) => errors.length).length
             }
           >
-            Update Contact
+            Update Person
           </Button>
         )}
       </Form.Item>
